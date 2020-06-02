@@ -1,4 +1,17 @@
 // Write your JavaScript code here!
+
+/* This block of code shows how to format the HTML once you fetch some planetary JSON!
+<h2>Mission Destination</h2>
+<ol>
+   <li>Name: ${}</li>
+   <li>Diameter: ${}</li>
+   <li>Star: ${}</li>
+   <li>Distance from Earth: ${}</li>
+   <li>Number of Moons: ${}</li>
+</ol>
+<img src="${}">
+*/
+
 window.addEventListener("load", function() {
    let formButton = document.getElementById("formSubmit");
 
@@ -24,25 +37,17 @@ window.addEventListener("load", function() {
 
       let isReady = null;
 
+      let missionTarget = document.getElementById("missionTarget");
+
       //gives an alert if Pilot or Copilot names are numbers, or if fuelLevel or cargoMass are not numbers
       if (pilotName.value == false || copilotName.value == false || fuelLevel.value == false || cargoMass.value == false) {
          window.alert("All fields are required!");
          isReady = false;
-         //         event.preventDefault();
       } else if (!(isNaN(Number(pilotName.value))) || !(isNaN(Number(copilotName.value)))
          || isNaN(Number(fuelLevel.value)) || isNaN(Number(cargoMass.value))) {
-         window.alert("Please verify you use Names for the Pilot and Copilot, and numbers for Fuel Level and CargoMass");
+         window.alert("Make sure to enter valid information for each field! \nNames should be letters \nFuel and Cargo Mass should be numbers");
          isReady = false;
-         //         event.preventDefault();
       } else {
-         /*   These alerts were for verification of data received that variable names were accurate
-
-                  window.alert(`Everyone is READY for Mission.
-                  This is the Pilot Name you submitted: ${pilotName.value}
-                  This is the Copilot Name you submitted: ${copilotName.value}
-                  This is the Fuel Level you submitted: ${fuelLevel.value}
-                  This is the Cargo Mass you submitted: ${cargoMass.value}`);
-               */
          isReady = true;
       }
 
@@ -84,6 +89,21 @@ window.addEventListener("load", function() {
          launchStatus.style.color = "green";
       }
       event.preventDefault();
+
+      fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response) {
+         response.json().then(function(json) {
+
+            missionTarget.innerHTML = `<h2>Mission Destination</h2>
+            <ol>
+               <li>Name: ${json[0].name}</li>
+               <li>Diameter: ${json[0].diameter}</li>
+               <li>Star: ${json[0].star}</li>
+               <li>Distance from Earth: ${json[0].distance}</li>
+               <li>Number of Moons: ${json[0].moons}</li>
+            </ol>
+            <img src="${json[0].image}">`;
+         });
+      });
 
    });
 
